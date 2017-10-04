@@ -51,6 +51,12 @@ module.exports.configure = function(mode) {
   protocolModule.globalAgent.maxSockets = 1000;
 
   protocolModule.request = function(options, callback) {
+
+    // Return if this is a local request.
+    if (options.host == '127.0.0.1') {
+      return oldRequest(options, callback);
+    }
+
     var reqUrl = sepiaUtil.urlFromHttpRequestOptions(options, protocol);
     var reqBody = [];
     var debug = sepiaUtil.shouldFindMatchingFixtures();
